@@ -8,7 +8,7 @@ import java.util.*;
 */
 class ShellSort extends AbstractSort {
 	
-	private static <T extends Comparable<T>> void sort(T[] array) {
+	public static <T extends Comparable<T>> void sort(T[] array) {
 		int length = array.length;
 		int H = HSequence(length);
 		
