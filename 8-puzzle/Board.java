@@ -1,3 +1,5 @@
+import java.util.*;
+
 public class Board {
     private int[][] blocks;
     private int N;
@@ -119,19 +121,19 @@ public class Board {
             }
         }
         
-        Queue<Board> neighbors = new Queue<Board>();
+        Queue<Board> neighbors = new LinkedList<Board>();
         // left blocks
         if (!invalidBlock(i, j-1)) {
-            neighbors.enqueue(neighbor(i, j, j-1, "row"));
+            neighbors.add(neighbor(i, j, j-1, "row"));
         }
         if (!invalidBlock(i, j+1)) {
-            neighbors.enqueue(neighbor(i, j, j+1, "row"));
+            neighbors.add(neighbor(i, j, j+1, "row"));
         }
         if (!invalidBlock(i-1, j)) {            
-            neighbors.enqueue(neighbor(j, i-1, i, "col"));
+            neighbors.add(neighbor(j, i-1, i, "col"));
         }
         if (!invalidBlock(i+1, j)) {            
-            neighbors.enqueue(neighbor(j, i+1, i, "col"));            
+            neighbors.add(neighbor(j, i+1, i, "col"));            
         }
         return neighbors;
     }
@@ -146,7 +148,7 @@ public class Board {
         StringBuilder s = new StringBuilder();
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                s.append(blocks[i][j] + " ");
+                s.append(String.format("%3d", blocks[i][j]));
             }
             s.append("\n");
         }
