@@ -4,7 +4,6 @@ import java.io.*;
 public class Solver {
     private Node process; // holds all the process nodes linked by previous pointer
     private int numMoves;
-    private int stacksize;
     
     private class Node implements Comparable<Node> {
         private Board board;
@@ -33,27 +32,43 @@ public class Solver {
         if (initial == null) throw new NullPointerException("initial board is null.");
         
         MinPQ<Node> minQ = new MinPQ<Node>();
-        MinPQ<Node> twinQ = new MinPQ<Node>();
-        
         process = new Node(initial, null, 0);
         minQ.insert(process);
+                       
+        MinPQ<Node> twinQ = new MinPQ<Node>();
+        Node twin = new Node(initial.twin(), null, 0);
+        twinQ.insert(twin);
         
         Node remove = null;
+        Node removedTwin = null;
+        
         while (!minQ.isEmpty()) {
             // remove lowest priority node
             process = minQ.deleteMin();
             remove = process;
             
+            twin = twinQ.deleteMin();
+            removedTwin = twin;
+            
             if (process.board.isGoal()) break;
+            if (twin.board.isGoal()) { process = null; break; }
             
             // iterate through all the neighbors
             for (Board board : process.board.neighbors()) {
                 process = new Node(board, remove, remove.moves+1); 
+                
+                // do not insert if the board is the same as the board dequeued 1 step ago
                 if (remove.previous != null && process.equals(remove.previous)) continue;
-                minQ.insert(process);                   
-            }            
+                minQ.insert(process);                  
+            }           
+            
+            for (Board board : twin.board.neighbors()) {
+                twin = new Node(board, removedTwin, removedTwin.moves+1);
+                if (removedTwin.previous != null && process.equals(removedTwin.previous)) continue;
+                twinQ.insert(twin);
+            }
         }  
-        numMoves = process.moves;
+        if (process != null) numMoves = process.moves;
     }
     
     // returns true if calling node and other node is equal
@@ -65,17 +80,21 @@ public class Solver {
      *  return true if the node is solvable
      */
     public boolean isSolvable() {
-        return true;
+        return process != null;
     }
     
-    public int moves() { return numMoves; }
+    public int moves() { 
+        if (!isSolvable()) return -1;
+        return numMoves; 
+    }
     
     public Iterable<Board> solution() {
-        Stack<Board> solution = new Stack<Board>();
+        if (!isSolvable()) return null;
+        
+        java.util.Stack<Board> solution = new java.util.Stack<Board>();
         while (process != null) {
             solution.push(process.board);
             process = process.previous;
-            stacksize++;
         }
         return solution;
     }
@@ -108,7 +127,6 @@ public class Solver {
                 System.out.println(board);
         }
         solver.solution();
-        System.out.println(solver.stacksize);
         System.out.println("finish");
     }
 }

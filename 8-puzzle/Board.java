@@ -1,4 +1,5 @@
 import java.util.*;
+import java.io.*;
 
 public class Board {
     private int[][] blocks;
@@ -121,19 +122,19 @@ public class Board {
             }
         }
         
-        Queue<Board> neighbors = new LinkedList<Board>();
+        java.util.Stack<Board> neighbors = new java.util.Stack<Board>();
         // left blocks
         if (!invalidBlock(i, j-1)) {
-            neighbors.add(neighbor(i, j, j-1, "row"));
+            neighbors.push(neighbor(i, j, j-1, "row"));
         }
         if (!invalidBlock(i, j+1)) {
-            neighbors.add(neighbor(i, j, j+1, "row"));
+            neighbors.push(neighbor(i, j, j+1, "row"));
         }
         if (!invalidBlock(i-1, j)) {            
-            neighbors.add(neighbor(j, i-1, i, "col"));
+            neighbors.push(neighbor(j, i-1, i, "col"));
         }
         if (!invalidBlock(i+1, j)) {            
-            neighbors.add(neighbor(j, i+1, i, "col"));            
+            neighbors.push(neighbor(j, i+1, i, "col"));            
         }
         return neighbors;
     }
