@@ -12,3 +12,5 @@ If use DrJava:
 <b>java-algs4</b> _filename_     </br>
 <b>checkstyle-algs4</b> _filename.java_ </br>
 <b>findbugs-algs4</b> _filename.class_ </br>
+
+Assignment 4 8-puzzle isn't tested and use own implementation of PriorityQueue due to class closing.
