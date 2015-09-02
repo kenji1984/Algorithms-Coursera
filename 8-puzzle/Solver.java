@@ -91,9 +91,9 @@ public class Solver {
     public Iterable<Board> solution() {
         if (!isSolvable()) return null;
         
-        java.util.Stack<Board> solution = new java.util.Stack<Board>();
+        java.util.Deque<Board> solution = new java.util.ArrayDeque<Board>();
         while (process != null) {
-            solution.push(process.board);
+            solution.addFirst(process.board);
             process = process.previous;
         }
         return solution;
